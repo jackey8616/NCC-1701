@@ -2,21 +2,26 @@ var setscale = solar_system.user.scale;
 var recordMouse = false;
 var mouseX;
 var mouseY;
-var n;
 var vm = new Vue({
 	el: '#app',
 	data: {
 		mywidth: document.body.clientWidth -10,
 		myheight: document.body.clientHeight - 30,
-		scale: solar_system.user.scale * 100
+		scale: solar_system.user.scale * 100,
+		target_planet: {
+			id: -1,
+			name: '',
+			color: ''
+		}
 	},
 	computed: {  },
 	methods: {
         handleScroll: function (event) {
-			console.log(event.wheelDelta);
-			setscale *= (event.wheelDelta > 0 ? 1 / 1.4 : 1.4);
+			// Debug in Chrome Mouse Wheel.
+			// console.log(event.wheelDelta);
+			setscale *= Math.pow(1.3, (-event.wheelDelta) / 180);
 			vm.scale = Math.round(setscale * 100) ;
-			n = 1000;
+			sleekStep = 1000;
 			scaleSleek();
         },
 		handleDown: function (event) {
@@ -24,9 +29,10 @@ var vm = new Vue({
 			recordMouse = true;
 			mouseX = event.pageX;
 			mouseY = event.pageY;
+			iteratePlanet(mouseX, mouseY);
 		},
 		handleMove: function (event) {
-			if(!recordMouse) return;
+			if(!recordMouse || targeting) return;
 			solar_system.user.viewx -= (event.pageX - mouseX) * solar_system.user.scale;
 			solar_system.user.viewy -= (event.pageY - mouseY) * solar_system.user.scale;
 			mouseX = event.pageX;
@@ -50,11 +56,49 @@ var vm = new Vue({
     }
 });
 
+var sleekStep;
 function scaleSleek(){
 	solar_system.user.scale = solar_system.user.scale + (setscale-solar_system.user.scale) / 200;
-	n--;
-	if(n > 0){
-		setTimeout(function(){scaleSleek(n)},10);
+	sleekStep--;
+	if(sleekStep > 0){
+		setTimeout(function(){ scaleSleek(sleekStep) },10);
 	}
 }
-	
+
+
+var targeting = false;
+var targetCount = 0;
+function iteratePlanet(mouseX, mouseY) {
+	mouseX -= 5;
+	mouseY -= 5;
+	targeting = false;
+	for(var i = 0; i < solar_system.planet.length; i++) {
+		var planet = solar_system.planet[i].interact;
+		if(planet.exists == false) continue;
+		if(planet.anchorX1 <= mouseX && mouseX <= planet.anchorX2 && 
+		   planet.anchorY1 <= mouseY && mouseY <= planet.anchorY2) {
+			    targeting = true;
+				targetCount++;
+			    targetPlanet(i, targetCount);
+			    return;
+		}
+	}
+}
+
+function targetPlanet(i, count) {
+	vm.target_planet = { 
+		id: solar_system.planet[i].id,
+		name: solar_system.planet[i].name,
+		color: solar_system.planet[i].color
+	};
+	solar_system.user.viewx = solar_system.planet[i].x;
+	solar_system.user.viewy = solar_system.planet[i].y;
+	if(targeting && count == targetCount)
+		setTimeout(function(){ targetPlanet(i, count) }, 10);
+	else
+		vm.target_planet = {
+			id: -1,
+			name: '',
+			color: ''
+		};
+}
