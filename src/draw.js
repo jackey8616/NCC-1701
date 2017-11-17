@@ -54,10 +54,10 @@ function drawCamPlanet(ctx, cam_center_x, cam_center_y) {
 		  }
 		  ctx.save();
 		  
-		  solar_system.planet[i].interact.anchorX1 = planet_x - planet_r;
+		  solar_system.planet[i].interact.anchorX1 = planet_x + planet_r;
 		  solar_system.planet[i].interact.anchorY1 = planet_y - planet_r - 15;
-		  solar_system.planet[i].interact.anchorX2 = planet_x + planet_r + 40;
-		  solar_system.planet[i].interact.anchorY2 = planet_y + planet_r;
+		  solar_system.planet[i].interact.anchorX2 = planet_x + planet_r + 60;
+		  solar_system.planet[i].interact.anchorY2 = planet_y - planet_r + 40;
 		  solar_system.planet[i].interact.exists = true;
 	  } else {
 		  solar_system.planet[i].interact.exists = false;

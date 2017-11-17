@@ -42,15 +42,12 @@ const run=(callback)=>{
 
     for(let i=0;i<planet_num;i++){
 	if(i==solar_system.user.view_selected_planet){
-	    solar_system.user.viewx+=solar_system.planet[i].xv*time;
-            solar_system.user.viewy+=solar_system.planet[i].yv*time;	
-   
+		setCamRelativeMovement(solar_system.planet[i].xv * time, solar_system.planet[i].yv * time);
 	}
         solar_system.planet[i].x+=solar_system.planet[i].xv*time;
         solar_system.planet[i].y+=solar_system.planet[i].yv*time;	
     }
-    console.log(solar_system.planet[1]);
-    callback();
+	callback();
     setTimeout(function() { run(callback) } ,5);
 }
 

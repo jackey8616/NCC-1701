@@ -65,9 +65,7 @@ function scaleSleek(){
 	}
 }
 
-
 var targeting = false;
-var targetCount = 0;
 function iteratePlanet(mouseX, mouseY) {
 	mouseX -= 5;
 	mouseY -= 5;
@@ -78,11 +76,15 @@ function iteratePlanet(mouseX, mouseY) {
 		if(planet.anchorX1 <= mouseX && mouseX <= planet.anchorX2 && 
 		   planet.anchorY1 <= mouseY && mouseY <= planet.anchorY2) {
 			    targeting = true;
-				targetCount++;
-			    targetPlanet(i, targetCount);
+				targetPlanet(i);
 			    return;
 		}
 	}
+	vm.target_planet = {
+			id: -1,
+			name: '',
+			color: ''
+		};
 }
 
 function targetPlanet(i, count) {
@@ -93,12 +95,10 @@ function targetPlanet(i, count) {
 	};
 	solar_system.user.viewx = solar_system.planet[i].x;
 	solar_system.user.viewy = solar_system.planet[i].y;
-	if(targeting && count == targetCount)
-		setTimeout(function(){ targetPlanet(i, count) }, 10);
-	else
-		vm.target_planet = {
-			id: -1,
-			name: '',
-			color: ''
-		};
+	solar_system.user.view_selected_planet = i;
+}
+
+function setCamRelativeMovement(additionX, additionY) {
+	solar_system.user.viewx += additionX;
+	solar_system.user.viewy += additionY;
 }
