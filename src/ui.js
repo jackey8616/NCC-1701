@@ -13,7 +13,8 @@ var vm = new Vue({
 	computed: {  },
 	methods: {
         handleScroll: function (event) {
-			setscale *= (event.wheelDelta == 180 ? 1 / 1.4 : 1.4);
+			console.log(event.wheelDelta);
+			setscale *= (event.wheelDelta > 0 ? 1 / 1.4 : 1.4);
 			vm.scale = Math.round(setscale * 100) ;
 			n = 1000;
 			scaleSleek();
