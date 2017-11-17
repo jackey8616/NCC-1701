@@ -32,7 +32,7 @@ var solar_system = {
 			y:0,
 			r:1.737e3,
 			xv:0,
-			yv:-29.78567831-1.02396911,
+			yv:(-29.78567831-1.02396911),
 			color: "WHITE",
 			interact: {}
 		}
@@ -43,7 +43,8 @@ var solar_system = {
 		viewy:0,
 		// Kilometer per pixel.
 		scale: 2000,
-		time_scale: 1
+		time_scale: 1000,
+		view_selected_planet: 1
 	}
 }
 
