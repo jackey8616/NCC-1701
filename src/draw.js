@@ -44,7 +44,7 @@ function drawCamPlanet(ctx, cam_center_x, cam_center_y) {
 		  ctx.stroke();
 		  ctx.fillStyle=solar_system.planet[i].color;
 		  ctx.fill();
-		  ctx.font = "15px Arial";
+		  ctx.font = "15px AGENT ORANGE";
 		  ctx.fillStyle=solar_system.planet[i].color;
 		  ctx.fillText(solar_system.planet[i].name, planet_x + planet_r, planet_y - planet_r);
 	  }
