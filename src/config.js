@@ -14,30 +14,6 @@ var solar_system = {
 		},
 		{
 			id: 1,
-			name:"Earth",
-			m:5.972e24,
-			x:1.496e8,
-			y:0,
-			r:6.371e3,
-			xv:0,
-			yv:29.78567831,
-			color: "BLUE",
-			interact: {}
-		},
-		{
-			id: 2,
-			name:"Moon",
-			m:7.36e22,
-			x:1.496e8+3.844e5,
-			y:0,
-			r:1.737e3,
-			xv:0,
-			yv:-(-29.78567831-1.02396911),
-			color: "WHITE",
-			interact: {}
-		},
-		{
-			id: 3,
 			name:"Mercury",
 			m:3.3e23,
 			x:5.79e7,
@@ -49,7 +25,7 @@ var solar_system = {
 			interact: {}
 		},
 		{
-			id: 4,
+			id: 2,
 			name:"Venus",
 			m:4.87e24,
 			x:1.082e8,
@@ -58,6 +34,30 @@ var solar_system = {
 			xv: 0,
 			yv: 35,
 			color: "#CD7F32",
+			interact: {}
+		},
+		{
+			id: 3,
+			name:"Moon",
+			m:7.36e22,
+			x:1.496e8+3.844e5,
+			y:0,
+			r:1.737e3,
+			xv:0,
+			yv:-(-29.78567831-1.02396911),
+			color: "WHITE",
+			interact: {}
+		},
+		{
+			id: 4,
+			name:"Earth",
+			m:5.972e24,
+			x:1.496e8,
+			y:0,
+			r:6.371e3,
+			xv:0,
+			yv:29.78567831,
+			color: "BLUE",
 			interact: {}
 		},
 		{
@@ -101,9 +101,9 @@ var solar_system = {
 		viewx:1.496e8,
 		viewy:0,
 		// Kilometer per pixel.
-		scale: 2000,
+		scale: 1500,
 		time_scale: 300,
-		view_selected_planet: 1
+		view_selected_planet: 4
 	}
 }
 

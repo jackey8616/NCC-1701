@@ -7,12 +7,13 @@ var vm = new Vue({
 	data: {
 		mywidth: document.body.clientWidth -10,
 		myheight: document.body.clientHeight - 30,
-		scale: solar_system.user.scale * 100,
+		scale: solar_system.user.scale * 1,
 		target_planet: {
 			id: -1,
 			name: '',
 			color: ''
-		}
+		},
+		fps: 0
 	},
 	computed: {  },
 	methods: {
