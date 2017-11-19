@@ -3,10 +3,11 @@
 	<link rel="stylesheet" href="css/main.css?v=1">
  </head>
  <body onload="draw()" style="background-color: BLACK;">
-	<div id="app" style="text-align: center; background-color: BLACK;">
+	<div id="app" style="background-color: BLACK;">
 		<p v-bind:style="{'top': 30, 'padding-left': mywidth / 2 - 25, 'color': target_planet.color, 'font-size': 20}">{{ target_planet.name }}</p>
-		<canvas id="canvas" v-bind:width="mywidth" v-bind:height="myheight" ></canvas>
-		<p v-bind:style="{'top': myheight - 30}" style="text-align: left; padding-left: 20px; padding-bottom: 20px;">1 (Pixel) : {{ scale }} (Km) FPS: {{ parseInt(fps) }}</p>
+		<canvas id="orbit_canvas" v-bind:width="mywidth" v-bind:height="myheight" style="position: absolute;"></canvas>		
+		<canvas id="canvas" v-bind:width="mywidth" v-bind:height="myheight" style="position: absolute;"></canvas>
+		<p v-bind:style="{'top': myheight - 30, 'bottom': 5}" style="text-align: left; padding-left: 20px; padding-bottom: 20px;">1 (Pixel) : {{ scale }} (Km) FPS: {{ parseInt(fps) }}</p>
 	</div>
 	<!--script src="https://unpkg.com/vue"></script-->
 	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
@@ -18,3 +19,6 @@
   
  </body>
 </html>
+<!--
+		
+-->

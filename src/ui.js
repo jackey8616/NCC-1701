@@ -39,6 +39,7 @@ var vm = new Vue({
 			user.sub_cam_position_with_scale(event.pageX - mouseX, event.pageY - mouseY);
 			mouseX = event.pageX;
 			mouseY = event.pageY;
+			clearTrack();
 		},
 		handleUp: function (event) {
 			recordMouse = false;
@@ -60,6 +61,7 @@ var vm = new Vue({
 
 var sleekStep;
 function scaleSleek(){
+	clearTrack();
 	user.inc_scale(setscale - user.scale / 200);
 	sleekStep--;
 	if(sleekStep > 0){
@@ -78,23 +80,17 @@ function iteratePlanet(mouseX, mouseY) {
 		if(planet.anchorX1 <= mouseX && mouseX <= planet.anchorX2 && 
 		   planet.anchorY1 <= mouseY && mouseY <= planet.anchorY2) {
 			    targeting = true;
-				targetPlanet(i);
+				targetPlanet(solar_system.planet[i]);
+				clearTrack();
 			    return;
 		}
 	}
-	vm.target_planet = {
-			id: -1,
-			name: '',
-			color: ''
-		};
+	vm.target_planet = new Planet(-1, "", 0, 0, 0, 0, 0, 0, "#000000");
 }
 
-function targetPlanet(i, count) {
-	vm.target_planet = { 
-		id: solar_system.planet[i].id,
-		name: solar_system.planet[i].name,
-		color: solar_system.planet[i].color
-	};
-	user.set_cam_position(solar_system.planet[i].x, solar_system.planet[i].y);
-	user.view_selected_planet = i;
+function targetPlanet(planet) {
+	user.set_cam_position(planet.x, planet.y);
+	user.view_selected_planet = planet.id;
+	user.selected_planet = planet;
+	vm.target_planet = user.selected_planet;
 }
