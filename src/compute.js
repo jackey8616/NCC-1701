@@ -21,31 +21,28 @@ const speed_a_improve =(mass,x1,x2,y1,y2)=>{
 }
 
 const run=(callback)=>{
-    let time = solar_system.user.time_scale; 
+    let time = user.time_scale; 
     let planet = solar_system.planet;
     let planet_num = planet.length;
     for(let i=0;i<planet_num;i++){
         let x_a =0;
         let y_a =0;
         let a =0;
-	for(let j=0;j<planet_num;j++){
-	    if(i!=j){
-		a = speed_a_improve(planet[j].m,planet[i].x,planet[j].x,planet[i].y,planet[j].y);
-		x_a += a.x;
-		y_a += a.y;
-	    }
-	}
-	solar_system.planet[i].xv += x_a*time;
-	solar_system.planet[i].yv += y_a*time;
-
+		for(let j=0;j<planet_num;j++){
+			if(i!=j){
+			a = speed_a_improve(planet[j].m,planet[i].x,planet[j].x,planet[i].y,planet[j].y);
+			x_a += a.x;
+			y_a += a.y;
+			}
+		}
+		solar_system.planet[i].inc_speed(x_a * time, y_a * time);
     }
 
     for(let i=0;i<planet_num;i++){
-	if(i==solar_system.user.view_selected_planet){
-		setCamRelativeMovement(solar_system.planet[i].xv * time, solar_system.planet[i].yv * time);
-	}
-        solar_system.planet[i].x+=solar_system.planet[i].xv*time;
-        solar_system.planet[i].y+=solar_system.planet[i].yv*time;	
+		if(i==user.view_selected_planet){
+			user.inc_cam_position(solar_system.planet[i].xv * time, solar_system.planet[i].yv * time);
+		}
+		solar_system.planet[i].inc_position(solar_system.planet[i].xv * time, solar_system.planet[i].yv * time);
     }
 	callback();
     setTimeout(function() { run(callback) } ,5);

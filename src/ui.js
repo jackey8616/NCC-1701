@@ -1,13 +1,15 @@
-var setscale = solar_system.user.scale;
+var setscale = user.scale;
 var recordMouse = false;
 var mouseX;
 var mouseY;
+
+const mouseScrollEvent = (/FireFox/i.test(navigator.userAgent)) ? "DOMMouseScroll" : "mousewheel";
 var vm = new Vue({
 	el: '#app',
 	data: {
 		mywidth: document.body.clientWidth -10,
 		myheight: document.body.clientHeight - 30,
-		scale: solar_system.user.scale * 1,
+		scale: user.scale * 1,
 		target_planet: {
 			id: -1,
 			name: '',
@@ -19,8 +21,8 @@ var vm = new Vue({
 	methods: {
         handleScroll: function (event) {
 			// Debug in Chrome Mouse Wheel.
-			// console.log(event.wheelDelta);
-			setscale *= Math.pow(1.3, (-event.wheelDelta) / 180);
+			var wheelDelta = event.detail ? event.detail * -120 : event.wheelDelta;
+			setscale *= Math.pow(1.3, (-wheelDelta) / 180);
 			vm.scale = Math.round(setscale * 100) ;
 			sleekStep = 1000;
 			scaleSleek();
@@ -34,8 +36,7 @@ var vm = new Vue({
 		},
 		handleMove: function (event) {
 			if(!recordMouse || targeting) return;
-			solar_system.user.viewx -= (event.pageX - mouseX) * solar_system.user.scale;
-			solar_system.user.viewy -= (event.pageY - mouseY) * solar_system.user.scale;
+			user.sub_cam_position_with_scale(event.pageX - mouseX, event.pageY - mouseY);
 			mouseX = event.pageX;
 			mouseY = event.pageY;
 		},
@@ -44,13 +45,13 @@ var vm = new Vue({
 		}
     },
     created: function () {
-        window.addEventListener('mousewheel', this.handleScroll);
+        window.addEventListener(mouseScrollEvent, this.handleScroll);
 		window.addEventListener('mousedown', this.handleDown);
 		window.addEventListener('mousemove', this.handleMove);
 		window.addEventListener('mouseup', this.handleUp);
     },
     destroyed: function () {
-        window.removeEventListener('mousewheel', this.handleScroll);
+        window.addEventListener(mouseScrollEvent, this.handleScroll);
 		window.removeEventListener('mousedown', this.handleDown);
 		window.removeEventListener('mousemove', this.handleMove);
 		window.removeEventListener('mouseup', this.handleUp);
@@ -59,7 +60,7 @@ var vm = new Vue({
 
 var sleekStep;
 function scaleSleek(){
-	solar_system.user.scale = solar_system.user.scale + (setscale-solar_system.user.scale) / 200;
+	user.inc_scale(setscale - user.scale / 200);
 	sleekStep--;
 	if(sleekStep > 0){
 		setTimeout(function(){ scaleSleek(sleekStep) },10);
@@ -94,12 +95,6 @@ function targetPlanet(i, count) {
 		name: solar_system.planet[i].name,
 		color: solar_system.planet[i].color
 	};
-	solar_system.user.viewx = solar_system.planet[i].x;
-	solar_system.user.viewy = solar_system.planet[i].y;
-	solar_system.user.view_selected_planet = i;
-}
-
-function setCamRelativeMovement(additionX, additionY) {
-	solar_system.user.viewx += additionX;
-	solar_system.user.viewy += additionY;
+	user.set_cam_position(solar_system.planet[i].x, solar_system.planet[i].y);
+	user.view_selected_planet = i;
 }
