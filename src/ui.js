@@ -10,21 +10,17 @@ var vm = new Vue({
 		mywidth: document.body.clientWidth -10,
 		myheight: document.body.clientHeight - 30,
 		scale: user.scale * 1,
-		target_planet: {
-			id: -1,
-			name: '',
-			color: ''
-		},
+		target_planet: new Planet(-1, "", 0, 0, 0, 0, 0, 0, "#000000"),
 		fps: 0
 	},
 	computed: {  },
 	methods: {
         handleScroll: function (event) {
-			// Debug in Chrome Mouse Wheel.
 			var wheelDelta = event.detail ? event.detail * -120 : event.wheelDelta;
 			setscale *= Math.pow(1.3, (-wheelDelta) / 180);
 			vm.scale = Math.round(setscale * 100) ;
-			sleekStep = 1000;
+			sleekStep = 500;
+			clearTrack();
 			scaleSleek();
         },
 		handleDown: function (event) {
@@ -61,11 +57,12 @@ var vm = new Vue({
 
 var sleekStep;
 function scaleSleek(){
-	clearTrack();
 	user.inc_scale(setscale - user.scale / 200);
-	sleekStep--;
-	if(sleekStep > 0){
+	user.drawOrbit = false;
+	if(sleekStep-- > 0){
 		setTimeout(function(){ scaleSleek(sleekStep) },10);
+	} else {
+		user.drawOrbit = true;
 	}
 }
 
@@ -89,8 +86,8 @@ function iteratePlanet(mouseX, mouseY) {
 }
 
 function targetPlanet(planet) {
+	vm.target_planet = planet;
 	user.set_cam_position(planet.x, planet.y);
 	user.view_selected_planet = planet.id;
 	user.selected_planet = planet;
-	vm.target_planet = user.selected_planet;
 }

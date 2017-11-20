@@ -1,6 +1,5 @@
 var cam_width = vm.mywidth;
 var cam_height = vm.myheight;
-// Bigger than screen
 var display_distance = Math.sqrt(Math.pow(cam_width, 2) + Math.pow(cam_height, 2));
 
 var timestamp = 0;
@@ -31,11 +30,13 @@ function drawCamPlanet(ctx, orbit_ctx, cam_center_x, cam_center_y) {
 		  planet_y = cam_height / 2 + (value.y - cam_center_y) / user.scale;
 		  planet_r = value.r / user.scale;
 		  
-		  orbit_ctx.beginPath();
-		  orbit_ctx.fillRect(planet_x, planet_y, 1, 1);
-		  orbit_ctx.closePath();
-		  orbit_ctx.fillStyle = "#3C3C3C";
-		  orbit_ctx.fill();
+		  if(user.drawOrbit) {
+			orbit_ctx.beginPath();
+			orbit_ctx.fillRect(planet_x, planet_y, 1, 1);
+			orbit_ctx.closePath();
+			orbit_ctx.fillStyle = "#3C3C3C";
+			orbit_ctx.fill();
+		  }
 		  
 		  ctx.beginPath();
 		  ////ctx.arc(parseInt(planet_x), parseInt(planet_y), parseInt(planet_r + 3), 0, Math.PI * 2, true); // Planet need to display.

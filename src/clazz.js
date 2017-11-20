@@ -49,6 +49,7 @@ class User {
 		this.time_scale = time_scale;
 		this.view_selected_planet = view_selected_planet;
 		this.selected_planet = new Planet(-1, "", 0, 0, 0, 0, 0, 0, "#000000");
+		this.drawOrbit = true;
 	}
 	
 	inc_scale(scale) {
