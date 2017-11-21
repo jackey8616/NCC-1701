@@ -9,8 +9,12 @@ var vm = new Vue({
 	data: {
 		mywidth: document.body.clientWidth -10,
 		myheight: document.body.clientHeight - 30,
-		scale: user.scale * 1,
-		target_planet: new Planet(-1, "", 0, 0, 0, 0, 0, 0, "#000000"),
+		scale: user.scale,
+		setScaleTime: 1500,
+		target_object: {
+			object: -1,
+			type: NaN
+		},
 		fps: 0
 	},
 	computed: {  },
@@ -18,7 +22,9 @@ var vm = new Vue({
         handleScroll: function (event) {
 			var wheelDelta = event.detail ? event.detail * -120 : event.wheelDelta;
 			setscale *= Math.pow(1.3, (-wheelDelta) / 180);
-			vm.scale = Math.round(setscale * 100) ;
+			console.log(setscale);
+			//vm.scale = Math.round(setscale) ;
+			vm.scale = setscale;
 			sleekStep = 500;
 			clearTrack();
 			scaleSleek();
@@ -32,13 +38,28 @@ var vm = new Vue({
 		},
 		handleMove: function (event) {
 			if(!recordMouse || targeting) return;
-			user.sub_cam_position_with_scale(event.pageX - mouseX, event.pageY - mouseY);
+			user.subCamPositionWithScale(event.pageX - mouseX, event.pageY - mouseY);
 			mouseX = event.pageX;
 			mouseY = event.pageY;
 			clearTrack();
 		},
 		handleUp: function (event) {
 			recordMouse = false;
+		},
+		handleKeyPress: (event) => {
+			var keyCode = event.keyCode;
+			switch(keyCode) {
+				case 93: { // ']' Increase.
+					user.timeScale *= 2;
+					vm.setScaleTime = user.timeScale;
+					break;
+				}
+				case 91: { // '[' Decrease.
+					user.timeScale /= 2;
+					vm.setScaleTime = user.timeScale;
+					break;
+				}
+			}
 		}
     },
     created: function () {
@@ -46,18 +67,20 @@ var vm = new Vue({
 		window.addEventListener('mousedown', this.handleDown);
 		window.addEventListener('mousemove', this.handleMove);
 		window.addEventListener('mouseup', this.handleUp);
+		window.addEventListener('keypress', this.handleKeyPress);
     },
     destroyed: function () {
         window.addEventListener(mouseScrollEvent, this.handleScroll);
 		window.removeEventListener('mousedown', this.handleDown);
 		window.removeEventListener('mousemove', this.handleMove);
 		window.removeEventListener('mouseup', this.handleUp);
+		window.removeEventListener('keypress', this.handleKeyPress);
     }
 });
 
 var sleekStep;
 function scaleSleek(){
-	user.inc_scale(setscale - user.scale / 200);
+	user.incScale((setscale - user.scale) / 200);
 	user.drawOrbit = false;
 	if(sleekStep-- > 0){
 		setTimeout(function(){ scaleSleek(sleekStep) },10);
@@ -77,17 +100,29 @@ function iteratePlanet(mouseX, mouseY) {
 		if(planet.anchorX1 <= mouseX && mouseX <= planet.anchorX2 && 
 		   planet.anchorY1 <= mouseY && mouseY <= planet.anchorY2) {
 			    targeting = true;
-				targetPlanet(solar_system.planet[i]);
+				targetPlanet(solar_system.planet[i], 0);
 				clearTrack();
 			    return;
 		}
 	}
-	vm.target_planet = new Planet(-1, "", 0, 0, 0, 0, 0, 0, "#000000");
+	for(var i = 0; i < solar_system.spaceship.length; i++) {
+		var ships = solar_system.spaceship[i].interact;
+		if(ships.exists == false) continue;
+		if(ships.anchorX1 <= mouseX && mouseX <= ships.anchorX2 && 
+		   ships.anchorY1 <= mouseY && mouseY <= ships.anchorY2) {
+			    targeting = true;
+				targetPlanet(solar_system.spaceship[i], 1);
+				clearTrack();
+			    return;
+		}
+	}
+	vm.target_object = { object: -1, type: NaN };
 }
 
-function targetPlanet(planet) {
-	vm.target_planet = planet;
-	user.set_cam_position(planet.x, planet.y);
-	user.view_selected_planet = planet.id;
-	user.selected_planet = planet;
+function targetPlanet(object, type) {
+	console.log(object);
+	vm.target_object = { object: object, type: type };
+	user.setCamPosition(object.x, object.y);
+	user.selected_id = object.id;
+	user.selected_type = type;
 }

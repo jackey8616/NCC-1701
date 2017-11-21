@@ -4,12 +4,14 @@
  </head>
  <body onload="draw()" style="background-color: BLACK;">
 	<div id="app" style="background-color: BLACK;">
-		<p v-bind:style="{'top': 30, 'padding-left': mywidth / 2 - 25, 'color': target_planet.color, 'font-size': 20}">{{ target_planet.name }}</p>
+		<p v-bind:style="{'top': 30, 'padding-left': mywidth / 2 - 25, 'color': target_object.object.color, 'font-size': 20}">{{ target_object.object.name }}</p>
 		<canvas id="orbit_canvas" v-bind:width="mywidth" v-bind:height="myheight" style="position: absolute;"></canvas>		
 		<canvas id="canvas" v-bind:width="mywidth" v-bind:height="myheight" style="position: absolute;"></canvas>
-		<p v-bind:style="{'top': myheight - 30, 'bottom': 5}" style="text-align: left; padding-left: 20px; padding-bottom: 20px;">1 (Pixel) : {{ scale }} (Km) FPS: {{ parseInt(fps) }}</p>
+		<p v-bind:style="{'top': myheight - 30, 'bottom': 5}" style="text-align: left; padding-left: 20px; padding-bottom: 20px;">
+			x{{ setScaleTime }}<br>
+			1 (Pixel) : {{ parseInt(scale * 1000) }} (m) FPS: {{ parseInt(fps) }}
+		</p>
 	</div>
-	<!--script src="https://unpkg.com/vue"></script-->
 	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 	<script src="src/clazz.js"></script>
 	<script src="src/config.js"></script>
@@ -19,6 +21,3 @@
   
  </body>
 </html>
-<!--
-		
--->

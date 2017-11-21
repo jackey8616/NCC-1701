@@ -24,8 +24,9 @@ const speed_a_improve =(mass,x1,x2,y1,y2)=>{
 const computerun=()=>{
 	var nowtime = new Date().getTime();
 	if(nowtime - lastcomputetime >100){lastcomputetime = nowtime -100;}
-    let time = user.time_scale * (nowtime - lastcomputetime)/1000; 
+    let time = user.timeScale * (nowtime - lastcomputetime)/1000; 
 	lastcomputetime = nowtime;
+	
     let planet = solar_system.planet;
     let planet_num = planet.length;
     for(let i=0;i<planet_num;i++){
@@ -39,14 +40,38 @@ const computerun=()=>{
 			y_a += a.y;
 			}
 		}
-		solar_system.planet[i].inc_speed(x_a * time, y_a * time);
+		solar_system.planet[i].incSpeed(x_a * time, y_a * time);
     }
 
-    for(let i=0;i<planet_num;i++){
-		if(i==user.view_selected_planet){
-			user.inc_cam_position(solar_system.planet[i].xv * time, solar_system.planet[i].yv * time);
+	
+	let ships = solar_system.spaceship;
+    for(let i=0;i<ships.length;i++){
+        let x_a =0;
+        let y_a =0;
+        let a =0;
+		for(let j=0;j<planet_num;j++){
+			
+			a = speed_a_improve(planet[j].m,ships[i].x,planet[j].x,ships[i].y,planet[j].y);
+			x_a += a.x;
+			y_a += a.y;
+			
 		}
-		solar_system.planet[i].inc_position(solar_system.planet[i].xv * time, solar_system.planet[i].yv * time);
+		ships[i].incSpeed(x_a * time, y_a * time);
+    }
+	
+	
+    for(let i=0;i<planet_num;i++){
+		if(i==user.selected_id && user.selected_type == 0){
+			user.incCamPosition(solar_system.planet[i].xv * time, solar_system.planet[i].yv * time);
+		}
+		solar_system.planet[i].incPosition(solar_system.planet[i].xv * time, solar_system.planet[i].yv * time);
+    }
+	
+    for(let i=0;i<ships.length;i++){
+		if(solar_system.spaceship[i].id==user.selected_id && user.selected_type == 1){
+			user.incCamPosition(ships[i].xv * time, ships[i].yv * time);
+		}
+		ships[i].incPosition(ships[i].xv * time, ships[i].yv * time);
     }
 	
     //setTimeout(run ,5);
