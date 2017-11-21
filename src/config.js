@@ -1,5 +1,5 @@
-//var user = new User(1.496e8, 0, 1500, 3000, 4);
-var user = new User(0, 0, 1500, 3000, 0); // For orbit tracking observe.
+var user = new User(1.496e8, 0, 1500, 86400, 4);
+//var user = new User(0, 0, 1500, 86400, 0); // For orbit tracking observe.
 var solar_system = {
 	planet:[
 		new Planet(0, "Sun", 1.989e30, 0, 0, 6.955e5, 0, 0, "#FF8000"),
