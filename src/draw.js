@@ -4,6 +4,7 @@ var display_distance = Math.sqrt(Math.pow(cam_width, 2) + Math.pow(cam_height, 2
 
 var timestamp = 0;
 function draw() {
+  computerun();
   var cam_center_x = user.viewx;
   var cam_center_y = user.viewy;
   var ctx = document.getElementById('canvas').getContext('2d');
@@ -12,9 +13,12 @@ function draw() {
   ctx.clearRect(0, 0, cam_width, cam_height);
 
   drawCamPlanet(ctx, orbit_ctx, cam_center_x, cam_center_y);
+  
+  drawShip(ctx, orbit_ctx, cam_center_x, cam_center_y);
  
-  ctx.restore(); 
-  orbit_ctx.restore();
+  vm.fps = vm.fps * 0.95 + (1000 / (new Date().getTime()- timestamp)) * 0.05;
+  timestamp = new Date().getTime() + 0;
+  
   window.requestAnimationFrame(draw);
 }
 
@@ -44,23 +48,73 @@ function drawCamPlanet(ctx, orbit_ctx, cam_center_x, cam_center_y) {
 		  ctx.closePath();
 		  ctx.fillStyle=value.color;
 		  ctx.fill();
-		  if(vm.target_planet.id != value.id) {
+		  if(vm.target_object.object.id != value.id) {
 			ctx.font = "15px AGENT ORANGE";
 			ctx.fillText(value.name, parseInt(planet_x + planet_r + 10), parseInt(planet_y - planet_r - 10));
 			ctx.stroke();
 		  }
 		  
 		  value.interact.update(planet_x + planet_r, planet_y - planet_r - 15,
-												planet_x + planet_r + 60,planet_y - planet_r + 40, true);
-		  
+												planet_x + planet_r + 60,planet_y - planet_r + 40, true);	  
 	  } else {
 		  value.interact.exists = false;
 	  }
 	});
-	orbit_ctx.save();
-	ctx.save();
-    vm.fps = vm.fps * 0.95 + (1000 / (new Date().getTime()- timestamp)) * 0.05;
-    timestamp = new Date().getTime() + 0;
+    orbit_ctx.save();
+    ctx.save();
+}
+
+function drawShip(ctx, orbit_ctx, cam_center_x, cam_center_y) {
+	var distance;
+	solar_system.spaceship.forEach((value) => {
+		distance = Math.sqrt(Math.pow(value.x - cam_center_x, 2) + Math.pow(value.y - cam_center_y, 2));
+		if(distance <= display_distance * user.scale + 1000) {
+			ship_x = cam_width  / 2 + (value.x - cam_center_x) / user.scale;
+			ship_y = cam_height / 2 + (value.y - cam_center_y) / user.scale;
+		  
+			if(user.drawOrbit) {
+				orbit_ctx.beginPath();
+				orbit_ctx.fillRect(ship_x, ship_y, 1, 1);
+				orbit_ctx.closePath();
+				orbit_ctx.fillStyle = "#3C3C3C";
+				orbit_ctx.fill();
+			}
+			
+			if(user.scale < 0.01) { // Bigger than 5 Km
+				value.componentList.forEach((points) => {
+					var pointList = points.calculateRelativePoint(value.c, ship_x, ship_y);
+					ctx.beginPath();
+					ctx.moveTo(pointList[0].x, pointList[0].y);
+					for(var i = 1; i < pointList.length; ++i) {
+						ctx.lineTo(pointList[i].x, pointList[i].y);
+					}
+					ctx.lineTo(pointList[0].x, pointList[0].y);
+					ctx.closePath();
+					ctx.strokeStyle = "#E0E0E0";
+					ctx.lineWidth = 0.001 / user.scale;
+					ctx.stroke();
+				});
+			} else {
+				ctx.beginPath();
+				ctx.arc(ship_x, ship_y, 1.5, 0, Math.PI * 2, true);
+				ctx.closePath();
+				ctx.fillStyle = "WHITE";
+				ctx.fill();
+			}
+			if(vm.target_object.object.id != value.id) {
+				ctx.font = "15px AGENT ORANGE";
+				ctx.fillText(value.name, parseInt(ship_x + 10), parseInt(ship_y - 10));
+				ctx.stroke();
+			}
+			
+			value.interact.update(ship_x + 10, ship_y  - 10 - 15,
+									ship_x + 10 + 60,ship_y  - 10 + 40, true);	
+		} else {
+			value.interact.exists = false;
+		}
+	});
+    orbit_ctx.save();
+    ctx.save();
 }
 
 function clearTrack() {
