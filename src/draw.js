@@ -43,19 +43,32 @@ function drawCamPlanet(ctx, orbit_ctx, cam_center_x, cam_center_y) {
 		  }
 		  
 		  ctx.beginPath();
-		  ////ctx.arc(parseInt(planet_x), parseInt(planet_y), parseInt(planet_r + 3), 0, Math.PI * 2, true); // Planet need to display.
-		  ctx.arc(planet_x, planet_y, planet_r + 2, 0, Math.PI * 2, true); // Planet need to display.
-		  ctx.closePath();
-		  ctx.fillStyle=value.color;
-		  ctx.fill();
-		  if(vm.target_object.object.id != value.id) {
-			ctx.font = "15px AGENT ORANGE";
-			ctx.fillText(value.name, parseInt(planet_x + planet_r + 10), parseInt(planet_y - planet_r - 10));
-			ctx.stroke();
+		  if(user.scale >0.1){
+			  ////ctx.arc(parseInt(planet_x), parseInt(planet_y), parseInt(planet_r + 3), 0, Math.PI * 2, true); // Planet need to display.
+			  ctx.arc(planet_x, planet_y, planet_r + 2, 0, Math.PI * 2, true); // Planet need to display.
+			  ctx.closePath();
+			  ctx.fillStyle=value.color;
+			  ctx.fill();
+			  if(vm.target_object.object.id != value.id) {
+				ctx.font = "15px AGENT ORANGE";
+				ctx.fillText(value.name, parseInt(planet_x + planet_r + 10), parseInt(planet_y - planet_r - 10));
+				ctx.stroke();
+			  }
+			  
+			  value.interact.update(planet_x + planet_r, planet_y - planet_r - 15,
+													planet_x + planet_r + 60,planet_y - planet_r + 40, true);	  
+		  }else{
+			var veterX = (cam_width  / 2 - planet_x)/Math.pow( Math.pow(planet_x - cam_width / 2,2) + Math.pow(planet_y - cam_height / 2,2),0.5) * planet_r;
+			var veterY = (cam_height / 2 - planet_y)/Math.pow( Math.pow(planet_x - cam_width / 2,2) + Math.pow(planet_y - cam_height / 2,2),0.5) * planet_r;
+		
+			ctx.moveTo(planet_x + veterX + veterY, planet_y - veterX + veterY);
+			ctx.lineTo(planet_x + veterX - veterY, planet_y + veterX + veterY);
+			ctx.lineTo(planet_x - veterY, planet_y + veterX);
+			ctx.lineTo(planet_x + veterY, planet_y - veterX);
+			ctx.closePath();
+			ctx.fillStyle = value.color;
+			ctx.fill();
 		  }
-		  
-		  value.interact.update(planet_x + planet_r, planet_y - planet_r - 15,
-												planet_x + planet_r + 60,planet_y - planet_r + 40, true);	  
 	  } else {
 		  value.interact.exists = false;
 	  }
