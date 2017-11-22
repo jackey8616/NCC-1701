@@ -72,6 +72,7 @@ const computeRun=()=>{
 			user.incCamPosition(ships[i].xv * time, ships[i].yv * time);
 		}
 		ships[i].incPosition(ships[i].xv * time, ships[i].yv * time);
+		solar_system.spaceship[i].setAngle(ships[i].a + ships[i].av * time);
     }
 	
 }

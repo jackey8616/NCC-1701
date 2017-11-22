@@ -76,6 +76,22 @@ function Spaceship(id, name, x, y, a, xv, yv, av, landPlanet) {
 		this.x += x;
 		this.y += y;
 	};
+	
+	this.setAngle = (angle) => {
+		var changeAngle = this.a - angle;
+		var CenterX = this.c.x;
+		var CenterY = this.c.y;
+		this.componentList.forEach((points) => {
+			var pointList = points.pointList;
+			for(var i = 0; i < pointList.length; i++) {
+				var x = pointList[i].x - CenterX;
+				var y = pointList[i].y - CenterY;
+				pointList[i].x = ( x * Math.cos(changeAngle) + y * Math.sin(changeAngle)) + CenterX;
+				pointList[i].y = (-x * Math.sin(changeAngle) + y * Math.cos(changeAngle)) + CenterY;
+			}
+		});
+		this.a = angle;
+	};
 }
 
 function Planet(id, name, m, x, y, r, xv, yv, color){
