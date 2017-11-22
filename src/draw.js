@@ -4,7 +4,7 @@ var display_distance = Math.sqrt(Math.pow(cam_width, 2) + Math.pow(cam_height, 2
 
 var timestamp = 0;
 function draw() {
-  computerun();
+  computeRun();
   var cam_center_x = user.viewx;
   var cam_center_y = user.viewy;
   var ctx = document.getElementById('canvas').getContext('2d');
