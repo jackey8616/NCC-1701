@@ -15,7 +15,9 @@ var vm = new Vue({
 			object: -1,
 			type: NaN
 		},
-		fps: 0
+		fps: 0,
+		target_planetname:"Earth",
+		Help: false
 	},
 	computed: {  },
 	methods: {
@@ -48,6 +50,7 @@ var vm = new Vue({
 		},
 		handleKeyPress: (event) => {
 			var keyCode = event.keyCode;
+			//console.log(keyCode);
 			switch(keyCode) {
 				case 93: { // ']' Increase.
 					user.timeScale *= 2;
@@ -59,6 +62,11 @@ var vm = new Vue({
 					vm.setScaleTime = user.timeScale;
 					break;
 				}
+				case 72:case 104:{
+					vm.Help = !vm.Help;
+					break;
+				}
+				
 			}
 		}
     },
@@ -121,6 +129,7 @@ function iteratePlanet(mouseX, mouseY) {
 
 function targetPlanet(object, type) {
 	//console.log(object);
+	vm.target_planetname = object.name;
 	vm.target_object = { object: object, type: type };
 	user.setCamPosition(object.x, object.y);
 	user.selected_id = object.id;

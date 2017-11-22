@@ -14,7 +14,7 @@ var solar_system = {
 	spaceship: [
 		new Spaceship(
 			108,
-			"FuHong",
+			"富鴻號",
 			1.496e8+4.044e5, 0, 0,
 			0, -(-29.78567831-1.47396911), 0,
 			-1
