@@ -1,4 +1,4 @@
-var user = new User(1.496e8, 0, 1500, 3600, 4);
+var user = new User(1.496e8, 0, 1500, 1, 4, 113);
 //var user = new User(0, 0, 1500, 86400, 0); // For orbit tracking observe.
 var solar_system = {
 	planet: [
@@ -51,7 +51,7 @@ var solar_system = {
 			113,
 			"Clode2",
 			1.496e8, -6.371e3-0.033, 0,
-			(-7.47396911), 29.78567831, Math.PI/20 * 1e-3,
+			(-7.47396911), 29.78567831, 0,
 			4
 		),
 	]

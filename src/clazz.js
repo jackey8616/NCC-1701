@@ -53,7 +53,10 @@ function Spaceship(id, name, x, y, a, xv, yv, av, landPlanet) {
 	this.componentList = [];
 	this.c = 0;
 	this.interact = new Interact();
-		
+	this.turnEngine = 0.3;
+	this.acceleratorStatus = false;
+	this.accelerator = 0.1;
+	
 	this.setComponentList = (componentList) => {
 		var sumMass = 0;
 		var xSumMass = 0;
@@ -78,20 +81,29 @@ function Spaceship(id, name, x, y, a, xv, yv, av, landPlanet) {
 	};
 	
 	this.setAngle = (angle) => {
-		var changeAngle = this.a - angle;
-		var CenterX = this.c.x;
-		var CenterY = this.c.y;
-		this.componentList.forEach((points) => {
-			var pointList = points.pointList;
-			for(var i = 0; i < pointList.length; i++) {
-				var x = pointList[i].x - CenterX;
-				var y = pointList[i].y - CenterY;
-				pointList[i].x = ( x * Math.cos(changeAngle) + y * Math.sin(changeAngle)) + CenterX;
-				pointList[i].y = (-x * Math.sin(changeAngle) + y * Math.cos(changeAngle)) + CenterY;
-			}
-		});
-		this.a = angle;
+		if(this.a != angle){
+			var changeAngle = this.a - angle;
+			var CenterX = this.c.x;
+			var CenterY = this.c.y;
+			this.componentList.forEach((points) => {
+				var pointList = points.pointList;
+				for(var i = 0; i < pointList.length; i++) {
+					var x = pointList[i].x - CenterX;
+					var y = pointList[i].y - CenterY;
+					pointList[i].x = ( x * Math.cos(changeAngle) + y * Math.sin(changeAngle)) + CenterX;
+					pointList[i].y = (-x * Math.sin(changeAngle) + y * Math.cos(changeAngle)) + CenterY;
+				}
+			});
+			this.a = angle;
+		}
 	};
+	
+	this.turn = (direction) => {
+		this.av += direction * this.turnEngine;
+	};
+	this.setAccelerator = () => {
+		this.acceleratorStatus = !this.acceleratorStatus;
+	}
 }
 
 function Planet(id, name, m, x, y, r, xv, yv, color){
@@ -117,7 +129,7 @@ function Planet(id, name, m, x, y, r, xv, yv, color){
 	}
 };
 
-function User(viewx, viewy, scale, timeScale, selected_id){
+function User(viewx, viewy, scale, timeScale, selected_id, operating){
 	this.viewx = viewx;
 	this.viewy = viewy;
 	this.scale = scale;
@@ -125,6 +137,7 @@ function User(viewx, viewy, scale, timeScale, selected_id){
 	this.selected_id = selected_id;
 	this.selected_type = 0;
 	this.drawOrbit = true;
+	this.operating = operating;
 	
 	this.incScale = function(scale) {
 		this.scale += scale;

@@ -52,6 +52,10 @@ const computeRun=()=>{
 				y_a += a.y;
 			}
 		}
+		if(ships[i].acceleratorStatus == true){
+			x_a += ships[i].accelerator * Math.sin(ships[i].a);
+			y_a += -ships[i].accelerator * Math.cos(ships[i].a);
+		}
 		ships[i].incSpeed(x_a * time, y_a * time);
     }
 	

@@ -10,7 +10,7 @@ var vm = new Vue({
 		mywidth: document.body.clientWidth -10,
 		myheight: document.body.clientHeight - 30,
 		scale: user.scale,
-		setScaleTime: 1500,
+		setScaleTime: 1,
 		target_object: {
 			object: -1,
 			type: NaN
@@ -50,7 +50,7 @@ var vm = new Vue({
 		},
 		handleKeyPress: (event) => {
 			var keyCode = event.keyCode;
-			//console.log(keyCode);
+			console.log(keyCode);
 			switch(keyCode) {
 				case 93: { // ']' Increase.
 					user.timeScale *= 2;
@@ -62,11 +62,31 @@ var vm = new Vue({
 					vm.setScaleTime = user.timeScale;
 					break;
 				}
-				case 72:case 104:{
+				case 72:case 104:{// 'h' or 'H' Help
 					vm.Help = !vm.Help;
 					break;
 				}
-				
+				case 65:case 97:{//'a' or 'A' left;
+					solar_system.spaceship.forEach(function(spaceship){
+						if( spaceship.id == user.operating)spaceship.turn(-1);
+					});
+					break;
+				}
+				case 68:case 100:{//'d' or 'D' right;
+					solar_system.spaceship.forEach(function(spaceship){
+						if( spaceship.id == user.operating)spaceship.turn(1);
+					});
+					break;
+				}
+				case 32:{//空白鍵 油門開關;
+					solar_system.spaceship.forEach(function(spaceship){
+						if( spaceship.id == user.operating){
+							spaceship.setAccelerator();
+							spaceship.landPlanet = -1;
+						}
+					});
+					break;
+				}
 			}
 		}
     },
