@@ -34,10 +34,18 @@ function Component(pointList, c, m, linkX, linkY) {
 	this.calculateRelativePoint = (shipC, x, y) => {
 		var newPointList = new Array(this.pointList.length);
 		for(var i = 0; i < this.pointList.length; i++) {
-			newPointList[i] = new Point(((this.pointList[i].x - shipC.x) / user.scale/100 + x) , ((this.pointList[i].y - shipC.y) / user.scale/100 + y));
+			newPointList[i] = new Point(((this.pointList[i].x - shipC.x) / user.scale / 100 + x) , ((this.pointList[i].y - shipC.y) / user.scale / 100 + y));
 		}
 		return newPointList;
-	}; 
+	};
+	
+	this.calculateRelativePointWithoutScale = (shipC, x, y) => {
+		var newPointList = new Array(this.pointList.length);
+		for(var i = 0; i < this.pointList.length; i++) {
+			newPointList[i] = new Point(((this.pointList[i].x - shipC.x) * 10 + x) , ((this.pointList[i].y - shipC.y) * 10 + y));
+		}
+		return newPointList;
+	};
 }
 
 function Spaceship(id, name, x, y, a, xv, yv, av, landPlanet) {

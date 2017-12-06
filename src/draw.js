@@ -27,6 +27,7 @@ function drawCamPlanet(ctx, orbit_ctx, cam_center_x, cam_center_y) {
 	var planet_x;
 	var planet_y;
 	var planer_r;
+	
 	solar_system.planet.forEach((value) => {
 	  distance = Math.sqrt(Math.pow(value.x - cam_center_x, 2) + Math.pow(value.y - cam_center_y, 2));
 	  if(distance <= display_distance * user.scale + value.r) {
@@ -76,15 +77,39 @@ function drawCamPlanet(ctx, orbit_ctx, cam_center_x, cam_center_y) {
 		  value.interact.exists = false;
 	  }
 	});
-    orbit_ctx.save();
+	orbit_ctx.save();
     ctx.save();
 }
 
 function drawShip(ctx, orbit_ctx, cam_center_x, cam_center_y) {
 	var distance;
 	solar_system.spaceship.forEach((value) => {
+		
+		ctx.beginPath();
+		ctx.rect(20, 20, 200, 200);
+		ctx.closePath();
+		ctx.strokeStyle = "#3C3C3C";
+		ctx.lineWidth = 1;
+		ctx.stroke();
+		
+		if(value.id == user.operating) {
+			value.componentList.forEach((points) => {
+					var pointList = points.calculateRelativePointWithoutScale(value.c, 120, 120);
+					ctx.beginPath();
+					ctx.moveTo(pointList[0].x, pointList[0].y);
+					for(var i = 1; i < pointList.length; ++i) {
+						ctx.lineTo(pointList[i].x, pointList[i].y);
+					}
+					ctx.lineTo(pointList[0].x, pointList[0].y);
+					ctx.closePath();
+					ctx.strokeStyle = "#E0E0E0";
+					ctx.stroke();
+				});
+		}
+		
 		distance = Math.sqrt(Math.pow(value.x - cam_center_x, 2) + Math.pow(value.y - cam_center_y, 2));
 		if(distance <= display_distance * user.scale + 1000) {
+			ctx.lineWidth = 0.001 / user.scale;
 			ship_x = cam_width  / 2 + (value.x - cam_center_x) / user.scale;
 			ship_y = cam_height / 2 + (value.y - cam_center_y) / user.scale;
 		  
