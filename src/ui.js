@@ -21,7 +21,7 @@ var vm = new Vue({
 	},
 	computed: {  },
 	methods: {
-        handleScroll: function (event) {
+    handleScroll: function (event) {
 			var wheelDelta = event.detail ? event.detail * -120 : event.wheelDelta;
 			setscale *= Math.pow(1.3, (-wheelDelta) / 180);
 			//console.log(setscale);
@@ -30,7 +30,7 @@ var vm = new Vue({
 			sleekStep = 500;
 			clearTrack();
 			scaleSleek();
-        },
+    },
 		handleDown: function (event) {
 			if(event.which !== 1) return;
 			recordMouse = true;
@@ -125,7 +125,7 @@ function iteratePlanet(mouseX, mouseY) {
 	for(var i = 0; i < solar_system.planet.length; i++) {
 		var planet = solar_system.planet[i].interact;
 		if(planet.exists == false) continue;
-		if(planet.anchorX1 <= mouseX && mouseX <= planet.anchorX2 && 
+		if(planet.anchorX1 <= mouseX && mouseX <= planet.anchorX2 &&
 		   planet.anchorY1 <= mouseY && mouseY <= planet.anchorY2) {
 			    targeting = true;
 				targetPlanet(solar_system.planet[i], 0);
@@ -136,7 +136,7 @@ function iteratePlanet(mouseX, mouseY) {
 	for(var i = 0; i < solar_system.spaceship.length; i++) {
 		var ships = solar_system.spaceship[i].interact;
 		if(ships.exists == false) continue;
-		if(ships.anchorX1 <= mouseX && mouseX <= ships.anchorX2 && 
+		if(ships.anchorX1 <= mouseX && mouseX <= ships.anchorX2 &&
 		   ships.anchorY1 <= mouseY && mouseY <= ships.anchorY2) {
 			    targeting = true;
 				targetPlanet(solar_system.spaceship[i], 1);
